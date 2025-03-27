@@ -13,7 +13,7 @@ def main():
       n = int(input("Enter the number of elements (1-100): "))
       if not 1 <= n <= MAX:
             print("Invalid input. Please provide a digit ranging from 1 to 100.")
-            exit(1)
+            return
 
       arr = []
 
@@ -31,7 +31,7 @@ def main():
 
    except KeyboardInterrupt:
       print("\nProgram terminated by user.")
-      exit(1)
+      return
 
 if __name__ == "__main__":
    main()
