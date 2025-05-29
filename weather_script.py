@@ -1,44 +1,26 @@
 import os
 import requests
 
-# Fetch weather data from OpenWeatherMap API
-def fetch_weather(api_key, city):
-    base_url = "http://api.openweathermap.org/data/2.5/weather"
+API_KEY = '2c95a5f2bead93c536fcffbee429f9ad'  # Replace with your OpenWeatherMap API key
+BASE_URL = 'https://api.openweathermap.org/data/2.5/weather'
+
+def get_weather(city):
     params = {
-        "q": city,
-        "appid": api_key,
-        "units": "metric"
+        'q': city,
+        'appid': API_KEY,
+        'units': 'metric'
     }
-    response = requests.get(base_url, params=params)
+    response = requests.get(BASE_URL, params=params)
     if response.status_code == 200:
         return response.json()
     else:
-        response.raise_for_status()
-
-def display_weather(data):
-    city = data.get("name")
-    temperature = data["main"].get("temp")
-    humidity = data["main"].get("humidity")
-    weather_condition = data["weather"][0].get("description")
-
-    print(f"Weather in {city}:")
-    print(f"Temperature: {temperature}°C")
-    print(f"Humidity: {humidity}%")
-    print(f"Condition: {weather_condition.capitalize()}")
-
-def main():
-    api_key = os.getenv("OPENWEATHER_API_KEY")  # Fetch API key from environment variable
-    if not api_key:
-        print("Error: API key not found. Set the OPENWEATHER_API_KEY environment variable.")
-        return
-
-    city = input("Enter the city name: ")
-
-    try:
-        weather_data = fetch_weather(api_key, city)
-        display_weather(weather_data)
-    except requests.exceptions.RequestException as e:
-        print(f"Error fetching weather data: {e}")
+        print(f"Error: {response.status_code} - {response.text}")
+        return None
 
 if __name__ == "__main__":
-    main()
+    city = input("Enter city name: ")
+    weather_data = get_weather(city)
+    if weather_data:
+        print(f"Weather in {city}: {weather_data['weather'][0]['description']}")
+        print(f"Temperature: {weather_data['main']['temp']}°C")
+        print(f"Humidity: {weather_data['main']['humidity']}%")
